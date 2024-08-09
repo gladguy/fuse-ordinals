@@ -1007,7 +1007,7 @@ const Nav = (props) => {
                       />
                       <Text className="font-weight-600 letter-spacing-medium text-color-one font-large">
                         {" "}
-                        BNB
+                        Fuse
                       </Text>
                     </Row>
                   ),

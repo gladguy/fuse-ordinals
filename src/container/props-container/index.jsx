@@ -313,7 +313,6 @@ export const propsContainer = (Component) => {
         console.log("fetching all borrow request error", error);
       }
     };
-
     const fetchBnBPrice = async () => {
       try {
         const bnbData = await API_METHODS.get(
