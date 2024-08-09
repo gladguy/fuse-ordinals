@@ -8,7 +8,7 @@ import {
   Tooltip,
   Typography,
 } from "antd";
-import { ethers } from "ethers";
+import { BrowserProvider, ethers, parseUnits } from "ethers";
 import React, { useEffect, useState } from "react";
 import { BiSolidSpreadsheet } from "react-icons/bi";
 import { FaHandHolding, FaMoneyBillAlt } from "react-icons/fa";
@@ -18,7 +18,7 @@ import { HiMiniReceiptPercent } from "react-icons/hi2";
 import { IoInformationCircleSharp, IoWarningSharp } from "react-icons/io5";
 import { MdContentCopy, MdDeleteForever, MdTour } from "react-icons/md";
 import { Bars } from "react-loading-icons";
-import Bitcoin from "../../assets/coin_logo/edu_coin.png";
+import Bitcoin from "../../assets/coin_logo/fuse_coin.png";
 import CustomButton from "../../component/Button";
 import WalletUI from "../../component/download-wallets-UI";
 import ModalDisplay from "../../component/modal";
@@ -384,8 +384,8 @@ const Portfolio = (props) => {
   ];
 
   const fetchLendingRequests = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
+    const provider = new BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
     const borrowContract = new ethers.Contract(
       BorrowContractAddress,
       borrowJson,
@@ -398,8 +398,8 @@ const Portfolio = (props) => {
   };
 
   const fetchBorrowingRequests = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
+    const provider = new BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
     const borrowContract = new ethers.Contract(
       BorrowContractAddress,
       borrowJson,
@@ -412,8 +412,8 @@ const Portfolio = (props) => {
   };
 
   const fetchUserRequests = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
+    const provider = new BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
     const borrowContract = new ethers.Contract(
       BorrowContractAddress,
       borrowJson,
@@ -428,8 +428,8 @@ const Portfolio = (props) => {
   const handleRepay = async (nftContract, tokenId) => {
     try {
       dispatch(setLoading(true));
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
       const borrowContract = new ethers.Contract(
         BorrowContractAddress,
         borrowJson,
@@ -442,16 +442,14 @@ const Portfolio = (props) => {
       );
 
       // Convert the hex value to BigNumber
-      const bigNumberValue = ethers.BigNumber.from(request.repayAmount);
+      // const bigNumberValue = BigNumber.from(request.repayAmount);
+      const bigNumberValue = 456789n;
 
       // Convert to decimal string
       const loanAmount_ = bigNumberValue.toString();
 
       let _loanAmount = loanAmount_ / ETH_ZERO;
-      const Wei_loanAmount = ethers.utils.parseUnits(
-        _loanAmount.toString(),
-        "ether"
-      ); // 1 Core, with 18 decimals
+      const Wei_loanAmount = parseUnits(_loanAmount.toString(), "ether"); // 1 Core, with 18 decimals
 
       const requestResult = await borrowContract.loanRepayment(
         nftContract,

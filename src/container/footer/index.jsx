@@ -4,7 +4,7 @@ import React from "react";
 import TailSpin from "react-loading-icons/dist/esm/components/tail-spin";
 import Bitcoin from "../../assets/coin_logo/Bitcoin.png";
 import Loading from "../../component/loading-wrapper/secondary-loader";
-import logo from "../../assets/coin_logo/edu_coin.png";
+import logo from "../../assets/coin_logo/fuse_coin.png";
 
 import { propsContainer } from "../props-container";
 

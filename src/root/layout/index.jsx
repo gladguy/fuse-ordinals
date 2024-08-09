@@ -197,7 +197,7 @@ const MainLayout = () => {
                                 screens.xs ? "font-xssmall" : "font-medium"
                               } font-family-one letter-spacing-small`}
                             >
-                              My Ordinals.Loan - BNB
+                              My Ordinals.Loan - FUSE
                             </Text>
                             <Text
                               className={`gradient-text-one ${

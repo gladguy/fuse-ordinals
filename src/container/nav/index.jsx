@@ -1,3 +1,4 @@
+import { FuseSDK } from "@fuseio/fusebox-web-sdk";
 import { useWallets } from "@wallet-standard/react";
 import {
   Col,
@@ -14,7 +15,7 @@ import {
   Tour,
   Typography,
 } from "antd";
-import { ethers } from "ethers";
+import { BrowserProvider, ethers } from "ethers";
 import gsap from "gsap";
 import React, { useEffect, useRef, useState } from "react";
 import { AiOutlineDisconnect } from "react-icons/ai";
@@ -25,7 +26,7 @@ import { AddressPurpose, BitcoinNetworkType, getAddress } from "sats-connect";
 import Web3 from "web3";
 import ordinals_O_logo from "../../assets/brands/ordinals_O_logo.png";
 import Bitcoin from "../../assets/coin_logo/Bitcoin.png";
-import logo from "../../assets/coin_logo/edu_coin.png";
+import logo from "../../assets/coin_logo/fuse_coin.png";
 import myordinalslogo from "../../assets/logo/ordinalslogo.png";
 import CustomButton from "../../component/Button";
 import CardDisplay from "../../component/card";
@@ -376,21 +377,66 @@ const Nav = (props) => {
         const web3 = new Web3(window.ethereum);
         try {
           await window.ethereum.request({ method: "eth_requestAccounts" });
-          const accounts = await web3.eth.getAccounts();
           const networkId = await web3.eth.net.getId();
 
-          if (Number(networkId) !== 656476) {
-            Notify("error", "Switch to the EDU open campus network!");
-            return;
+          if (Number(networkId) !== 122) {
+            Notify("error", "Switch to the tFUSE network!");
+            const chainId = "0x7a";
+            try {
+              await window.ethereum.request({
+                method: "wallet_switchEthereumChain",
+                params: [{ chainId }],
+              });
+            } catch (switchError) {
+              if (switchError.code === 4902) {
+                // This error code indicates that the chain has not been added to MetaMask.
+                try {
+                  await window.ethereum.request({
+                    method: "wallet_addEthereumChain",
+                    params: [
+                      {
+                        chainId, // Chain ID for Fuse Testnet (decimal 122)
+                        chainName: "Fuse Mainnet",
+                        nativeCurrency: {
+                          name: "FUSE",
+                          symbol: "FUSE",
+                          decimals: 18,
+                        },
+                        rpcUrls: ["https://rpc.fuse.io"],
+                        blockExplorerUrls: ["https://explorer.fuse.io"],
+                      },
+                    ],
+                  });
+                } catch (addError) {
+                  console.error("Failed to add the network:", addError);
+                }
+              } else {
+                console.error("Failed to switch the network:", switchError);
+              }
+            }
           }
+
+          const provider = new BrowserProvider(window.ethereum);
+
+          const signer = await await provider.getSigner();
+
           setWalletConnection({
             ...walletConnection,
             [META_WALLET_KEY]: {
-              address: accounts[0],
+              address: signer.address,
               publicKey: null,
             },
           });
           setActiveConnections([...activeConnections, META_WALLET_KEY]);
+          const fuseSDK = await FuseSDK.init(
+            process.env.REACT_APP_FUSE_API_KEY,
+            signer,
+            {
+              withPaymaster: true,
+            }
+          );
+
+          fuseSDK.wallet.getSender();
         } catch (error) {
           console.error("User denied account access", error);
         }
@@ -434,8 +480,8 @@ const Nav = (props) => {
       const isBtcExist = await API.retrieveByEthereumAddress(metaAddress);
       const isEthExist = await API.retrieveByBitcoinAddress(btcAddress);
       const isCounterExist = await API.retrieve(metaAddress);
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
       const contract = new ethers.Contract(
         IndexContractAddress,
         indexJson,
@@ -1009,20 +1055,20 @@ const Nav = (props) => {
                   key: "3",
                   label: (
                     <>
-                      {activeConnections.length === 2 ? (
-                        <Row align={"middle"}>
-                          <CustomButton
-                            block
-                            title={"Sign in"}
-                            onClick={handleConnectionFinish}
-                            className={
-                              "click-btn font-weight-600 letter-spacing-small"
-                            }
-                          />
-                        </Row>
-                      ) : (
+                      {/* {activeConnections.length === 2 ? ( */}
+                      <Row align={"middle"}>
+                        <CustomButton
+                          block
+                          title={"Sign in"}
+                          onClick={handleConnectionFinish}
+                          className={
+                            "click-btn font-weight-600 letter-spacing-small"
+                          }
+                        />
+                      </Row>
+                      {/* ) : (
                         ""
-                      )}
+                      )} */}
                     </>
                   ),
                 },

@@ -5,7 +5,7 @@ import xverse from "../assets/wallet-logo/xverse_logo_whitebg.png";
 import magiceden from "../assets/brands/magiceden.svg"
 import { Actor, HttpAgent } from "@dfinity/agent";
 import Web3 from "web3";
-import { ethers } from "ethers";
+import { BrowserProvider, ethers } from 'ethers';
 
 export const API_METHODS = {
   get: axios.get,
@@ -92,6 +92,30 @@ export const calculateFee = (bytes, preference) => {
   )
 }
 
+export const connectMetaMask = async () => {
+  if (typeof window.ethereum !== 'undefined') {
+    try {
+      // Request account access
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+      // Create an ethers provider
+      const provider = new ethers.BrowserProvider(window.ethereum);
+
+      // Get the signer
+      const signer = await provider.getSigner();
+
+      return { provider, signer };
+    } catch (error) {
+      console.error('User denied account access or error occurred:', error);
+      throw error;
+    }
+  } else {
+    console.error('MetaMask is not installed.');
+    throw new Error('MetaMask is not installed');
+  }
+}
+
+
 function fractionToFixed(numerator, denominator, minDecimalPlaces = 2, maxDecimalPlaces = 20) {
   // Convert fraction to decimal
   const decimalValue = numerator / denominator;
@@ -136,9 +160,9 @@ export const calculateOrdinalInBNB = (ordinalFloor, BTCPriceInUSD, BNBPriceInUSD
   };
 }
 
-export const IndexContractAddress = "0x5B78CE843E7Be6c3897D1bfb6fBF1474344bCdC2";
-export const TokenContractAddress = "0xDB8971813D745fe0a9C71C2b7f73fb6407027FA2";
-export const BorrowContractAddress = "0xB1ad3119D8713Bf109ff73A60feC2f1Fd2f55536";
+export const IndexContractAddress = "0x74a9c9D45aD2c94b92480E45A5E05ca8A56D5E03";
+export const TokenContractAddress = "0x197d7c3047CB37B8DB327f91943C7025E4F6eA2d";
+export const BorrowContractAddress = "0xb6D44B640E34147C2a15F1612C6bdFA679C19E89";
 
 export const contractGenerator = async (abi, contractAddress) => {
   const web3 = new Web3(window.ethereum);
@@ -147,8 +171,8 @@ export const contractGenerator = async (abi, contractAddress) => {
 }
 
 export const ethersContractCreator = async (abi, contractAddress) => {
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
+  const provider = new BrowserProvider(window.ethereum);
+  const signer = await provider.getSigner();
   const contract = new ethers.Contract(abi, contractAddress, signer);
   return contract
 }

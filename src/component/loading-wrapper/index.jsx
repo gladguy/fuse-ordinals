@@ -1,6 +1,6 @@
 import { Spin } from "antd";
 import { useSelector } from "react-redux";
-import bitcoin from "../../assets/coin_logo/edu_coin.png";
+import bitcoin from "../../assets/coin_logo/fuse_coin.png";
 
 const LoadingWrapper = ({ children }) => {
   const loading = useSelector((state) => state.constant.isLoading);

@@ -9,7 +9,7 @@ import {
   Tooltip,
   Typography,
 } from "antd";
-import { ethers } from "ethers";
+import { BrowserProvider, ethers, parseUnits } from "ethers";
 import React, { useEffect, useRef, useState } from "react";
 import { BiSolidOffer } from "react-icons/bi";
 import { FaCaretDown } from "react-icons/fa";
@@ -18,7 +18,7 @@ import { IoInformationCircleSharp } from "react-icons/io5";
 import { PiPlusSquareThin } from "react-icons/pi";
 import { TbInfoSquareRounded } from "react-icons/tb";
 import { Bars } from "react-loading-icons";
-import Bitcoin from "../../assets/coin_logo/edu_coin.png";
+import Bitcoin from "../../assets/coin_logo/fuse_coin.png";
 import CustomButton from "../../component/Button";
 import CardDisplay from "../../component/card";
 import LendModal from "../../component/lend-modal";
@@ -342,8 +342,8 @@ const Borrowing = (props) => {
 
   const fetchBorrowRequests = async () => {
     try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
       const borrowContract = new ethers.Contract(
         BorrowContractAddress,
         borrowJson,
@@ -378,8 +378,8 @@ const Borrowing = (props) => {
   const handleCreateRequest = async () => {
     if (borrowModalData.collateral) {
       setIsRequestBtnLoading(true);
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
 
       const borrowContract = new ethers.Contract(
         BorrowContractAddress,
@@ -394,18 +394,12 @@ const Borrowing = (props) => {
           const repaymentAmount =
             borrowModalData.amount + Number(borrowModalData.interest);
 
-          const Wei_loanAmount = ethers.utils.parseUnits(
-            amount.toString(),
-            "ether"
-          ); // 1 Core, with 18 decimals
-          const Wei_repayAmount = ethers.utils.parseUnits(
+          const Wei_loanAmount = parseUnits(amount.toString(), "ether"); // 1 Core, with 18 decimals
+          const Wei_repayAmount = parseUnits(
             repaymentAmount.toString(),
             "ether"
           ); // 1.05 Core, with 18 decimals
-          const Wei_platformFee = ethers.utils.parseUnits(
-            platformFee.toString(),
-            "ether"
-          ); // 0.01 Core, with 18 decimals
+          const Wei_platformFee = parseUnits(platformFee.toString(), "ether"); // 0.01 Core, with 18 decimals
 
           const requestResult = await borrowContract.createBorrowRequest(
             TokenContractAddress,
@@ -451,8 +445,8 @@ const Borrowing = (props) => {
   const approveBorrowRequest = async (canIdoApprove) => {
     try {
       setIsRequestBtnLoading(true);
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
 
       const tokensContract = new ethers.Contract(
         TokenContractAddress,

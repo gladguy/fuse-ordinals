@@ -1,10 +1,10 @@
 import { Col, Collapse, Divider, Flex, Grid, Row, Typography } from "antd";
-import { ethers } from "ethers";
+import { BrowserProvider, ethers } from "ethers";
 import { useEffect, useState } from "react";
 import { FaCaretDown } from "react-icons/fa";
 import { TbInfoSquareRounded } from "react-icons/tb";
 import { useSelector } from "react-redux";
-import Bitcoin from "../../assets/coin_logo/edu_coin.png";
+import Bitcoin from "../../assets/coin_logo/fuse_coin.png";
 import borrowJson from "../../utils/borrow_abi.json";
 import {
   API_METHODS,
@@ -42,8 +42,8 @@ const LendModal = ({
   const handleAcceptRequest = async () => {
     try {
       setIsOfferBtnLoading(true);
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
       const tokensContract = new ethers.Contract(
         TokenContractAddress,
         tokensJson,

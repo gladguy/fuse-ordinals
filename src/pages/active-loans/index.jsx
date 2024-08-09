@@ -1,6 +1,6 @@
 import { Col, Flex, Row, Typography } from "antd";
 import Link from "antd/es/typography/Link";
-import { ethers } from "ethers";
+import { BrowserProvider, ethers } from "ethers";
 import _ from "lodash";
 import { useEffect, useState } from "react";
 import { IoInformationCircleSharp } from "react-icons/io5";
@@ -72,8 +72,8 @@ const ActiveLoans = (props) => {
   const getContractCollaterals = async () => {
     try {
       // --------------------------------------------------
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
       const contract = new ethers.Contract(
         TokenContractAddress,
         tokenAbiJson,

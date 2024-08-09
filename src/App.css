@@ -1,6 +1,6 @@
 :root {
   --header-bg-color: black;
-  --main-light-blue: #00edbe;
+  --main-light-blue: whitesmoke;
   --primary-grey: #2c2d30;
   --secondary-blue: #55AD9B;
 }
@@ -52,7 +52,7 @@ body {
 
 .ant-layout-header {
   padding-inline: 0px;
-  background-color: #061c23 !important;
+  background-color: #000000 !important;
   line-height: 0px !important;
   backdrop-filter: blur(16px);
 }
@@ -123,7 +123,7 @@ body {
 
 .theme-bg {
   /* background-image: radial-gradient(circle at top left, #06122e 17%, #040d22 36%, #311d3e 32%, #311d3e 70%, #5e263e 48%, #5e263e 65%); */
-  background: #030d17;
+  background: #0e0101;
   border: none;
   height: 100%;
   background-attachment: fixed;
@@ -441,7 +441,7 @@ body {
 .headertitle {
   font-weight: 700;
   font-size: 18px;
-  background: #ebe6c8;
+  background: #fb5959;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1602,7 +1602,7 @@ input::-webkit-input-placeholder {
 }
 
 .ant-table-thead>tr>th {
-  background-color: #061c23 !important;
+  background-color: #270a0a !important;
   color: #ebe6c8 !important;
   font-size: medium;
   letter-spacing: 0.7px;

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { BiSolidOffer } from "react-icons/bi";
 import { MdOutlineTimer } from "react-icons/md";
 import { Bars } from "react-loading-icons";
-import Bitcoin from "../../assets/coin_logo/edu_coin.png";
+import Bitcoin from "../../assets/coin_logo/fuse_coin.png";
 import CustomButton from "../../component/Button";
 import CardDisplay from "../../component/card";
 import LendModal from "../../component/lend-modal";

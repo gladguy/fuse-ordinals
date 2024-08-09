@@ -1,7 +1,7 @@
 import { Col, Flex, Row, Typography } from "antd";
 import Bars from "react-loading-icons/dist/esm/components/bars";
 import { useSelector } from "react-redux";
-import Bitcoin from "../../assets/coin_logo/edu_coin.png";
+import Bitcoin from "../../assets/coin_logo/fuse_coin.png";
 import { calculateOrdinalInBNB, getTimeAgo } from "../../utils/common";
 import CustomButton from "../Button";
 import ModalDisplay from "../modal";

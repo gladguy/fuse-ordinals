@@ -10,12 +10,12 @@ import {
 } from "antd";
 import gsap from "gsap";
 import React, { useEffect, useState } from "react";
-import bitcoin from "../../assets/coin_logo/edu_coin.png";
+import bitcoin from "../../assets/coin_logo/fuse_coin.png";
 import borrows from "../../assets/logo/Borrowing.png";
 import lends from "../../assets/logo/Lending.png";
+import CustomButton from "../../component/Button";
 import CardDisplay from "../../component/card";
 import { propsContainer } from "../../container/props-container";
-import CustomButton from "../../component/Button";
 
 const Home = (props) => {
   const { reduxState } = props.redux;
@@ -24,7 +24,7 @@ const Home = (props) => {
   const bnbValue = reduxState.constant.bnbValue;
   const btcvalue = reduxState.constant.btcvalue;
 
-  const { Title, Text } = Typography;
+  const { Text } = Typography;
   const { useBreakpoint } = Grid;
   const breakpoints = useBreakpoint();
 

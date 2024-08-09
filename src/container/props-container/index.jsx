@@ -1,5 +1,5 @@
 import { Actor, HttpAgent } from "@dfinity/agent";
-import { ethers } from "ethers";
+import { BrowserProvider, ethers } from "ethers";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -244,8 +244,8 @@ export const propsContainer = (Component) => {
         const supplyData = userAssets.map((asset) => JSON.parse(asset));
         colResult = await getCollectionDetails(supplyData);
         // --------------------------------------------------
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
+        const provider = new BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
         const contract = new ethers.Contract(
           TokenContractAddress,
           tokenAbiJson,
@@ -278,37 +278,30 @@ export const propsContainer = (Component) => {
         dispatch(setBorrowCollateral(borrowCollateral));
         dispatch(setUserCollateral(finalData));
       } catch (error) {
-        if (
-          error.message.includes("No NFT found") ||
-          error.message.includes("No single NFT has been minted yet")
-        ) {
-          const finalData = colResult.map((asset) => {
-            let data = { ...asset, collection: {} };
-            approvedCollections.forEach((col) => {
-              if (col.symbol === asset.collection.symbol) {
-                data = {
-                  ...asset,
-                  collection: col,
-                  isToken: [].includes(asset.inscriptionNumber) ? true : false,
-                };
-              }
-            });
-            return data;
+        const finalData = colResult.map((asset) => {
+          let data = { ...asset, collection: {} };
+          approvedCollections.forEach((col) => {
+            if (col.symbol === asset.collection.symbol) {
+              data = {
+                ...asset,
+                collection: col,
+                isToken: [].includes(asset.inscriptionNumber) ? true : false,
+              };
+            }
           });
+          return data;
+        });
 
-          const borrowCollateral = finalData.filter((asset) => asset.isToken);
-          dispatch(setBorrowCollateral(borrowCollateral));
-          dispatch(setUserCollateral(finalData));
-        } else {
-          console.log("Collateral fetching error", error.message);
-        }
+        const borrowCollateral = finalData.filter((asset) => asset.isToken);
+        dispatch(setBorrowCollateral(borrowCollateral));
+        dispatch(setUserCollateral(finalData));
       }
     };
 
     const getAllBorrowRequests = async () => {
       try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
+        const provider = new BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
         const borrowContract = new ethers.Contract(
           BorrowContractAddress,
           borrowJson,
@@ -324,17 +317,16 @@ export const propsContainer = (Component) => {
     const fetchBnBPrice = async () => {
       try {
         const bnbData = await API_METHODS.get(
-          `${process.env.REACT_APP_COINGECKO_API}?ids=edu-coin&vs_currencies=usd`,
+          `${process.env.REACT_APP_COINGECKO_API}?ids=fuse-network-token&vs_currencies=usd`,
           {
             headers: {
               Authorization: `Bearer CG-C1ctoxMc9Gmdbnua7zX1hfa7`,
             },
           }
         );
-        console.log("bnbData", bnbData);
 
-        if (bnbData.data["edu-coin"]) {
-          const bnbValue = bnbData.data["edu-coin"].usd;
+        if (bnbData.data["fuse-network-token"]) {
+          const bnbValue = bnbData.data["fuse-network-token"].usd;
           dispatch(setBnbValue(bnbValue));
         } else {
           fetchBnBPrice();

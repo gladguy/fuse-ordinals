@@ -1,4 +1,4 @@
-import { Button, Col, Divider, Flex, Row, Tooltip, Typography } from "antd";
+import { Col, Divider, Flex, Row, Tooltip, Typography } from "antd";
 import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 import { FaRegSmileWink } from "react-icons/fa";
@@ -10,7 +10,7 @@ import { MdContentCopy } from "react-icons/md";
 import { PiCopyBold } from "react-icons/pi";
 import { Bars } from "react-loading-icons";
 import { Link } from "react-router-dom";
-import Bitcoin from "../../assets/coin_logo/edu_coin.png";
+import Bitcoin from "../../assets/coin_logo/fuse_coin.png";
 import CustomButton from "../../component/Button";
 import ModalDisplay from "../../component/modal";
 import Notify from "../../component/notification";
@@ -101,8 +101,8 @@ const BridgeOrdinals = (props) => {
   const handleTokenMint = async (inscriptionNumber) => {
     try {
       dispatch(setLoading(true));
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
       const contract = new ethers.Contract(
         TokenContractAddress,
         tokenAbiJson,
