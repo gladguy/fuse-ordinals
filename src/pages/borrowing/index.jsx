@@ -49,7 +49,7 @@ const Borrowing = (props) => {
   const metaAddress = reduxState.wallet.meta.address;
 
   const btcvalue = reduxState.constant.btcvalue;
-  const bnbValue = reduxState.constant.bnbValue;
+  const coinValue = reduxState.constant.coinValue;
 
   const CONTENT_API = process.env.REACT_APP_ORDINALS_CONTENT_API;
 
@@ -214,7 +214,7 @@ const Borrowing = (props) => {
         const data = calculateOrdinalInBNB(
           Number(obj.floorPrice),
           btcvalue,
-          bnbValue
+          coinValue
         );
         return (
           <Flex align="center" vertical gap={5}>
@@ -252,7 +252,7 @@ const Borrowing = (props) => {
               const floorPrice = calculateOrdinalInBNB(
                 floor,
                 btcvalue,
-                bnbValue
+                coinValue
               ).ordinalInBNB;
 
               // Assets
@@ -776,7 +776,7 @@ const Borrowing = (props) => {
                 size="large"
                 suffix={
                   <Text className={`text-color-one font-xsmall`}>
-                    $ {(borrowModalData.amount * bnbValue).toFixed(2)}
+                    $ {(borrowModalData.amount * coinValue).toFixed(2)}
                   </Text>
                 }
               />
@@ -804,7 +804,7 @@ const Borrowing = (props) => {
                 }
                 suffix={
                   <Text className={`text-color-one font-xsmall`}>
-                    $ {(borrowModalData.interest * bnbValue).toFixed(2)}
+                    $ {(borrowModalData.interest * coinValue).toFixed(2)}
                   </Text>
                 }
               />
@@ -1076,7 +1076,8 @@ const Borrowing = (props) => {
                             <Text
                               className={`card-box border text-color-two padding-small-box padding-small-box font-xsmall`}
                             >
-                              $ {(borrowModalData.amount * bnbValue).toFixed(2)}
+                              ${" "}
+                              {(borrowModalData.amount * coinValue).toFixed(2)}
                             </Text>
 
                             <Text
@@ -1109,7 +1110,9 @@ const Borrowing = (props) => {
                               className={`card-box border text-color-two padding-small-box font-xsmall`}
                             >
                               ${" "}
-                              {(borrowModalData.interest * bnbValue).toFixed(2)}
+                              {(borrowModalData.interest * coinValue).toFixed(
+                                2
+                              )}
                             </Text>
 
                             <Text
@@ -1142,9 +1145,9 @@ const Borrowing = (props) => {
                               className={`card-box border text-color-two padding-small-box font-xsmall`}
                             >
                               ${" "}
-                              {(borrowModalData.platformFee * bnbValue).toFixed(
-                                2
-                              )}
+                              {(
+                                borrowModalData.platformFee * coinValue
+                              ).toFixed(2)}
                             </Text>
 
                             <Text

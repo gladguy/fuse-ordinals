@@ -9,7 +9,7 @@ import {
   setAgent,
   setAllBorrowRequest,
   setApprovedCollection,
-  setBnbValue,
+  setCoinValue,
   setBorrowCollateral,
   setBtcValue,
   setCollection,
@@ -44,7 +44,7 @@ export const propsContainer = (Component) => {
     const magicEdenAddress = reduxState.wallet.magicEden.ordinals.address;
     const metaAddress = reduxState.wallet.meta.address;
     const api_agent = reduxState.constant.agent;
-    const bnbValue = reduxState.constant.bnbValue;
+    const coinValue = reduxState.constant.coinValue;
     const collections = reduxState.constant.collection;
     const approvedCollections = reduxState.constant.approvedCollections;
     const userAssets = reduxState.constant.userAssets;
@@ -313,9 +313,9 @@ export const propsContainer = (Component) => {
         console.log("fetching all borrow request error", error);
       }
     };
-    const fetchBnBPrice = async () => {
+    const fetchCoinPrice = async () => {
       try {
-        const bnbData = await API_METHODS.get(
+        const coinData = await API_METHODS.get(
           `${process.env.REACT_APP_COINGECKO_API}?ids=fuse-network-token&vs_currencies=usd`,
           {
             headers: {
@@ -324,12 +324,12 @@ export const propsContainer = (Component) => {
           }
         );
 
-        if (bnbData.data["fuse-network-token"]) {
-          const bnbValue = bnbData.data["fuse-network-token"].usd;
-          dispatch(setBnbValue(bnbValue));
+        if (coinData.data["fuse-network-token"]) {
+          const coinValue = coinData.data["fuse-network-token"].usd;
+          dispatch(setCoinValue(coinValue));
         } else {
-          fetchBnBPrice();
-          if (!bnbValue) dispatch(setBnbValue(1.82));
+          fetchCoinPrice();
+          if (!coinValue) dispatch(setCoinValue(1.82));
         }
       } catch (error) {
         // Notify("error", "Failed to fetch Aptos");
@@ -339,7 +339,7 @@ export const propsContainer = (Component) => {
     useEffect(() => {
       (() => {
         setInterval(async () => {
-          fetchBnBPrice();
+          fetchCoinPrice();
         }, [300000]);
         return () => clearInterval();
       })();
@@ -411,7 +411,7 @@ export const propsContainer = (Component) => {
       //Fetching BTC Value
       fetchBTCLiveValue();
 
-      fetchBnBPrice();
+      fetchCoinPrice();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

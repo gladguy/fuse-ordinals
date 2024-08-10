@@ -1055,20 +1055,20 @@ const Nav = (props) => {
                   key: "3",
                   label: (
                     <>
-                      {/* {activeConnections.length === 2 ? ( */}
-                      <Row align={"middle"}>
-                        <CustomButton
-                          block
-                          title={"Sign in"}
-                          onClick={handleConnectionFinish}
-                          className={
-                            "click-btn font-weight-600 letter-spacing-small"
-                          }
-                        />
-                      </Row>
-                      {/* ) : (
+                      {activeConnections.length === 2 ? (
+                        <Row align={"middle"}>
+                          <CustomButton
+                            block
+                            title={"Sign in"}
+                            onClick={handleConnectionFinish}
+                            className={
+                              "click-btn font-weight-600 letter-spacing-small"
+                            }
+                          />
+                        </Row>
+                      ) : (
                         ""
-                      )} */}
+                      )}
                     </>
                   ),
                 },
